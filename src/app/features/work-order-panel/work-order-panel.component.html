@@ -1,0 +1,57 @@
+<div class="panel-overlay" (click)="onCancel()"></div>
+
+<div class="panel">
+
+  <div class="panel-header">
+    <h2>{{ editOrder ? 'Edit Work Order' : 'Create Work Order' }}</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+
+    <div class="form-group">
+      <label>Work Order Name</label>
+      <input type="text" formControlName="name" />
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+      <ng-select
+        [items]="statuses"
+        formControlName="status"
+        appendTo="body">
+      </ng-select>
+    </div>
+
+    <div class="form-group">
+      <label>Work Center</label>
+      <ng-select
+        [items]="workCenters"
+        bindLabel="data.name"
+        bindValue="docId"
+        formControlName="workCenterId"
+        appendTo="body">
+      </ng-select>
+    </div>
+
+    <div class="date-row">
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" formControlName="startDate" />
+      </div>
+
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" formControlName="endDate" />
+      </div>
+    </div>
+
+    <div class="panel-actions">
+      <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="btn-primary">
+        {{ editOrder ? 'Update' : 'Create' }}
+      </button>
+    </div>
+
+  </form>
+
+</div>

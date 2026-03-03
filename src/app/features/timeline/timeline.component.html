@@ -1,0 +1,92 @@
+<div class="timeline-wrapper">
+
+  <div class="timeline-header-bar">
+    <h2>Work Orders</h2>
+
+    <div class="header-controls">
+      <button (click)="goToToday()">Today</button>
+
+      <select (change)="onZoomChange($any($event.target).value)">
+        <option value="day">Day</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="timeline">
+
+    <!-- LEFT SIDE -->
+    <div class="left-panel">
+      <div
+        class="row"
+        *ngFor="let wc of workCenters"
+        (click)="openCreate(wc.docId)">
+        {{ wc.data.name }}
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right-panel">
+
+      <!-- TODAY LINE -->
+      <div
+        class="today-line"
+        [style.left.px]="getLeftPosition(today)">
+      </div>
+
+      <!-- DATE HEADER -->
+      <div class="row header-row">
+        <div
+          class="grid-column"
+          *ngFor="let col of columns; let i = index"
+          [style.left.px]="i * columnWidth"
+          [style.width.px]="columnWidth">
+
+          <div class="date-label">
+            {{ col | date:'MMM d' }}
+          </div>
+
+        </div>
+      </div>
+
+      <!-- WORK CENTER ROWS -->
+      <div
+        class="row"
+        *ngFor="let wc of workCenters">
+
+        <!-- GRID -->
+        <div
+          class="grid-column"
+          *ngFor="let col of columns; let i = index"
+          [style.left.px]="i * columnWidth"
+          [style.width.px]="columnWidth">
+        </div>
+
+        <!-- WORK ORDERS -->
+        <div
+          class="work-order-bar"
+          *ngFor="let order of getOrdersForWorkCenter(wc.docId)"
+          [style.left.px]="getLeftPosition(order.data.startDate)"
+          [style.width.px]="getBarWidth(order.data.startDate, order.data.endDate)"
+          [style.background]="getStatusColor(order.data.status)">
+          {{ order.data.name }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<app-work-order-panel
+  *ngIf="isPanelOpen"
+  [workCenters]="workCenters"
+  [selectedWorkCenterId]="selectedWorkCenterId"
+  [editOrder]="editingOrder"
+  [defaultStartDate]="selectedDate"
+  (save)="handleSave($event)"
+  (close)="handleClose()">
+</app-work-order-panel>

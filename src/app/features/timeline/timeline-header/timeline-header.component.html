@@ -1,0 +1,13 @@
+<div class="timeline-header">
+  <h1>Work Orders</h1>
+
+  <div class="header-actions">
+    <button (click)="today()">Today</button>
+
+    <select [value]="zoomLevel" (change)="setZoom($any($event.target).value)">
+      <option value="day">Day</option>
+      <option value="week">Week</option>
+      <option value="month">Month</option>
+    </select>
+  </div>
+</div>
