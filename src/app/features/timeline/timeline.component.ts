@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkOrderPanelComponent } from '../work-order-panel/work-order-panel.component';
 import { WorkOrderDocument, WorkOrderStatus } from '../../shared/models/work-order.model';
 import { STATUS_COLORS } from '../../core/constants/status-colors.constant';
 
-
 @Component({
   selector: 'app-timeline',
   standalone: true,
-imports: [CommonModule, WorkOrderPanelComponent],
+  imports: [CommonModule, WorkOrderPanelComponent],
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss']
 })
@@ -42,6 +41,19 @@ export class TimelineComponent implements OnInit {
   ngOnInit() {
     this.initTimeline();
   }
+
+@HostListener('document:click', ['$event'])
+closeMenuOnOutsideClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (
+    target.closest('.menu-btn') ||
+    target.closest('.menu-dropdown')
+  ) {
+    return;
+  }
+
+  this.activeMenu = null;
+}
 
   initTimeline() {
     this.visibleStart = new Date();
@@ -110,6 +122,7 @@ export class TimelineComponent implements OnInit {
     this.editingOrder = order;
     this.selectedWorkCenterId = order.data.workCenterId;
     this.isPanelOpen = true;
+    this.activeMenu = null;
   }
 
   deleteOrder(id: string) {

@@ -1,3 +1,31 @@
+<div class="page-header">
+  <div class="header-left">
+    <div class="planner-date">
+      PLANNER · {{ today | date:'MMM d, yyyy' }}
+    </div>
+    <h1>Work Order Schedule</h1>
+    <p>Visualize, create, and edit work orders across every work center.</p>
+
+    <div class="status-filters">
+      <span class="status-pill open">Open</span>
+      <span class="status-pill progress">In Progress</span>
+      <span class="status-pill complete">Complete</span>
+      <span class="status-pill blocked">Blocked</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <label>Timescale</label>
+    <select (change)="onZoomChange($any($event.target).value)">
+      <option value="day">Day</option>
+      <option value="week">Week</option>
+      <option value="month">Month</option>
+    </select>
+
+    <button (click)="goToToday()">Today</button>
+  </div>
+</div>
+
 <div class="timeline-wrapper">
 
   <div class="timeline-header-bar">
@@ -64,14 +92,63 @@
         </div>
 
         <!-- WORK ORDERS -->
-        <div
+        <!-- <div
           class="work-order-bar"
           *ngFor="let order of getOrdersForWorkCenter(wc.docId)"
           [style.left.px]="getLeftPosition(order.data.startDate)"
           [style.width.px]="getBarWidth(order.data.startDate, order.data.endDate)"
           [style.background]="getStatusColor(order.data.status)">
           {{ order.data.name }}
-        </div>
+        </div> -->
+        <!-- WORK ORDERS -->
+<div
+  class="work-order-bar"
+  *ngFor="let order of getOrdersForWorkCenter(wc.docId)"
+  [style.left.px]="getLeftPosition(order.data.startDate)"
+  [style.width.px]="getBarWidth(order.data.startDate, order.data.endDate)"
+  [style.background]="getStatusColor(order.data.status)">
+
+  <div class="order-content">
+
+    <div class="order-title">
+      {{ order.data.name }}
+    </div>
+
+    <div class="order-meta">
+      <span class="badge">
+        {{ order.data.status }}
+      </span>
+
+      <span class="date-range">
+        {{ order.data.startDate | date:'MMM d' }} -
+        {{ order.data.endDate | date:'MMM d' }}
+      </span>
+    </div>
+
+  </div>
+
+  <button
+    class="menu-btn"
+    (click)="toggleMenu(order.docId); $event.stopPropagation()">
+    ⋮
+  </button>
+
+  <div
+    class="menu-dropdown"
+    *ngIf="activeMenu === order.docId"
+    (click)="$event.stopPropagation()">
+
+    <button (click)="openEditPanel(order)">
+      Edit
+    </button>
+
+    <button (click)="deleteOrder(order.docId)">
+      Delete
+    </button>
+
+  </div>
+
+</div>
 
       </div>
 
